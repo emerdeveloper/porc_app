@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:porc_app/core/services/database_service.dart';
+import 'package:porc_app/core/utils/route_utils.dart';
+import 'package:porc_app/firebase_options.dart';
+import 'package:porc_app/ui/screens/others/user_provider.dart';
+import 'package:porc_app/ui/screens/splash/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  //await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -12,15 +19,16 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
-  @override
+ @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ScreenUtilInit(
+      builder: (context, child) => ChangeNotifierProvider(
+        create: (context) => UserProvider(DatabaseService()),
+        child: const MaterialApp(
+          onGenerateRoute: RouteUtils.onGenerateRoute,
+          home: SplashScreen(),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -74,12 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildName() => buildTitle(
-        title: 'Name',
+        title: 'Nombre',
         child: TextFormField(
           //controller: controllerName,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            hintText: 'Your Name',
+            hintText: 'Tu nombre',
           ),
         ),
       );

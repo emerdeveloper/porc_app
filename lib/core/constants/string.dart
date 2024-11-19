@@ -15,6 +15,6 @@ const searchIcon = "assets/search_icon.png";
 const signup = "/signup";
 const login = "/login";
 
-const wrapper = "/wrapper";
-const chatRoom = "/chatRoom";
+const inversors = "/inversors";
+const pigLots = "/pigLots";
 const home = "/home";

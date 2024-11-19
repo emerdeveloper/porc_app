@@ -48,32 +48,6 @@ class CustomTextfield extends StatelessWidget {
           ),
         ),
       )
-      /*TextField(
-        controller: controller,
-        onChanged: onChanged,
-        focusNode: focusNode,
-        obscureText: isPassword,
-        decoration: InputDecoration(
-            contentPadding:
-                isChatText ? EdgeInsets.symmetric(horizontal: 12.w) : null,
-            filled: true,
-            fillColor: isChatText ? white : grey.withOpacity(0.12),
-            hintText: hintText,
-            hintStyle: body.copyWith(color: grey),
-            suffixIcon: isSearch
-                ? Container(
-                    height: 55,
-                    width: 55,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        color: primary,
-                        borderRadius: BorderRadius.circular(12.r)),
-                    child: Image.asset(searchIcon),
-                  )
-                : isChatText
-                    ? InkWell(onTap: onTap, child: const Icon(Icons.send))
-                    : null,
-      )*/
     );
   }
 

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DatabaseService {
+class DatabaseUserService {
   final _fire = FirebaseFirestore.instance;
 
   Future<void> saveUser(Map<String, dynamic> userData) async {
@@ -33,7 +33,7 @@ class DatabaseService {
     try {
       final res = await _fire
           .collection("users")
-          //.where("uid", isNotEqualTo: currentUserId)
+          .where("uid", isNotEqualTo: currentUserId)
           .get();
 
       return res.docs.map((e) => e.data()).toList();
@@ -46,6 +46,11 @@ class DatabaseService {
           String currentUserId) =>
       _fire
           .collection("users")
-          //.where("uid", isNotEqualTo: currentUserId)
+          .where("uid", isNotEqualTo: currentUserId)
+          .snapshots();
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> fetchAllUserStream() =>
+      _fire
+          .collection("users")
           .snapshots();
 }

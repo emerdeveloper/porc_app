@@ -1,47 +1,40 @@
 import 'dart:developer';
 
 import 'package:porc_app/core/enums/enums.dart';
+import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
 import 'package:porc_app/core/other/base_viewmodel.dart';
-import 'package:porc_app/core/services/database_service.dart';
+import 'package:porc_app/core/services/database_pig_lots_services.dart';
 
 class PigLotsViewmodel extends BaseViewmodel {
-  final DatabaseService _db;
-  final UserModel? _currentUser;
+  final DatabasePigLotsService _db;
+  final UserModel _currentUser;
 
   PigLotsViewmodel(this._db, this._currentUser) {
-    fetchUsers();
+    fetchPigLots();
   }
 
-  List<UserModel> _users = [];
-  List<UserModel> _filteredUsers = [];
+  List<PigLotsModel> _pigLots = [];
+  List<PigLotsModel> _filteredPigLots = [];
 
-  List<UserModel> get users => _users;
-  List<UserModel> get filteredUsers => _filteredUsers;
+  List<PigLotsModel> get pigLots => _pigLots;
+  List<PigLotsModel> get filteredPigLots => _filteredPigLots;
 
   search(String value) {
-    _filteredUsers =
-        _users.where((e) => e.name!.toLowerCase().contains(value)).toList();
+    _filteredPigLots =
+        _pigLots.where((e) => e.loteName!.toLowerCase().contains(value)).toList();
     notifyListeners();
   }
 
-  fetchUsers() async {
+  fetchPigLots() async {
     try {
       setstate(ViewState.loading);
-      // final res = await _db.fetchUsers(_currentUser.uid!);
-
-      //_db.fetchUserStream(_currentUser.uid!).listen((data) {
-      _db.fetchUserStream("_currentUser.uid!").listen((data) {
-        _users = data.docs.map((e) => UserModel.fromMap(e.data())).toList();
-        _filteredUsers = users;
+      log(_currentUser.uid!);
+      _db.fetchPigLotsStream(_currentUser.uid!).listen((data) {
+        _pigLots = data.docs.map((e) => PigLotsModel.fromMap(e.data())).toList();
+        _filteredPigLots = pigLots;
         notifyListeners();
       });
-
-      // if (res != null) {
-      //   _users = res.map((e) => UserModel.fromMap(e)).toList();
-      //   _filteredUsers = _users;
-      //   notifyListeners();
-      // }
       setstate(ViewState.idle);
     } catch (e) {
       setstate(ViewState.idle);

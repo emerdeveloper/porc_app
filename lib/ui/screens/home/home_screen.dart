@@ -1,10 +1,9 @@
 import 'package:porc_app/core/constants/string.dart';
 import 'package:porc_app/ui/screens/home/home_viewmodel.dart';
-//import 'package:porc_app/ui/screens/home/chats_list/chats_list_screen.dart';
+import 'package:porc_app/ui/screens/inversors/inversors_screen.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:porc_app/ui/screens/pig_lots/pig_lots_screen.dart';
 import 'package:porc_app/ui/screens/resume/resume_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -12,9 +11,9 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   static final List<Widget> _screens = [
-    const Center(child: Text("Home Screen")),
+    const InversorsScreen(),
     const ResumeScreen(),
-    const PigLotsScreen()
+    const Center(child: Text("Home Screen"))
   ];
 
   @override

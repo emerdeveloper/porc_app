@@ -89,7 +89,7 @@ class FeedRequestScreen extends StatelessWidget {
                         items: providersModel.pigFeeds, // Lista de alimentos filtrados
                         value: providersModel.pigFeeds.isNotEmpty ? providersModel.pigFeeds.first : null, // Valor inicial
                         onChanged: (value) {
-                          //feedRequestModel.setSelectedProvider(value);
+                          providersModel.selectPigFeed(value);
                           print("Seleccionaste: $value");
                         },
                         hintText: "Selecciona un alimento",
@@ -109,7 +109,7 @@ class FeedRequestScreen extends StatelessWidget {
                             ? null
                             : () async {
                                 try {
-                                  await feedRequestModel.save(pigLot);
+                                  await feedRequestModel.save(pigLot, providersModel.selectedPigFeed!);
                                   context.showSnackbar("Solicitud guardada con éxito");
                                   Navigator.pop(context);
                                 } catch (e) {

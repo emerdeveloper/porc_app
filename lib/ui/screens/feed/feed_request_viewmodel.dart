@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:porc_app/core/enums/enums.dart';
 import 'package:porc_app/core/models/feed_model.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
+import 'package:porc_app/core/models/providers_model.dart';
 import 'package:porc_app/core/other/base_viewmodel.dart';
 import 'package:porc_app/core/services/database_feed_service.dart';
 
@@ -47,13 +48,13 @@ class FeedRequestViewmodel extends BaseViewmodel {
     log("Confirm Password: $_confirmPassword");
   }
 
-  save(PigLotsModel pigLot) async {
+  save(PigLotsModel pigLot, PigFeedModel feedSelected) async {
     setstate(ViewState.loading);
     try {
         FeedModel feed = FeedModel(
             pigLotId: pigLot.id!, 
-            pigFeedName: "_name", 
-            pigFeedPrice: 20.00, 
+            pigFeedName: feedSelected.name, 
+            pigFeedPrice: feedSelected.price, 
             paymentDate: DateTime.now(), 
             numberPackages: 20,
             isPaymentDone: false,

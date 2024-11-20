@@ -16,12 +16,14 @@ class ProvidersViewmodel extends BaseViewmodel {
   List<ProviderModel> _providers = [];
   List<String> _providersName = [];
   List<String> _pigFeeds = [];
-  String? _selectedProvider;
+  ProviderModel? _selectedProvider;
+  PigFeedModel? _selectedPigFeed;
 
   List<ProviderModel> get providers => _providers;
   List<String> get providersName => _providersName;
   List<String> get pigFeeds => _pigFeeds;
-  String? get selectedProvider => _selectedProvider;
+  ProviderModel? get selectedProvider => _selectedProvider;
+  PigFeedModel? get selectedPigFeed => _selectedPigFeed;
 
   List<bool> _expanded = [];
   List<bool> get expanded => _expanded;
@@ -55,9 +57,9 @@ class ProvidersViewmodel extends BaseViewmodel {
     }
   }
   void selectProvider(String? providerName) {
-    _selectedProvider = providerName;
+    //_selectedProvider = providerName;
     // Buscar el proveedor seleccionado
-    final provider = _providers.firstWhere(
+    _selectedProvider = _providers.firstWhere(
       (p) => p.name == providerName,
       orElse: () => ProviderModel(
       id: '',
@@ -67,9 +69,24 @@ class ProvidersViewmodel extends BaseViewmodel {
     ),
     );
     // Actualizar los alimentos según el proveedor seleccionado
-    _pigFeeds = provider.pigFeed.map((feed) => "${feed.name} - ${feed.price}").toList();
+    _pigFeeds = _selectedProvider!.pigFeed.map((feed) => "${feed.name} - ${feed.price}").toList();
     notifyListeners();
   }
+
+  void selectPigFeed(String? pigFeedName) {
+    //_selectedPigFeed = pigFeedName;
+    // Buscar el proveedor seleccionado
+    _selectedPigFeed = _selectedProvider!.pigFeed.firstWhere(
+      (p) => p.name == pigFeedName,
+      orElse: () => PigFeedModel(
+      id: '',
+      name: 'Desconocido',
+      price: 0
+    ),
+    );
+    notifyListeners();
+  }
+
 
 
   void toggleExpanded(int index) {

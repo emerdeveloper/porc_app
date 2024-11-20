@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class PigLotsModel {
   final String? id;
   final String? ownerId;
@@ -44,7 +42,9 @@ class PigLotsModel {
       ownerId: map['ownerId'] != null ? map['ownerId'] as String : null,
       pigletPrice: map['pigletPrice'] != null ? (map['pigletPrice'] as num).toDouble() : null,
       isPaymentDone: map['isPaymentDone'] != null ? map['isPaymentDone'] as bool : null,
-      weaningDate: map['weaningDate'] != null ? (map['weaningDate'] as Timestamp).toDate() : null,
+      weaningDate: map['weaningDate'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['weaningDate'] as int)
+          : null,
       loteName: map['loteName'] != null ? map['loteName'] as String : null,
       males: map['males'] != null ? map['males'] as int : null,
       females: map['females'] != null ? map['females'] as int : null,

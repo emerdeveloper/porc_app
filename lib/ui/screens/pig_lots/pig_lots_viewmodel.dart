@@ -31,7 +31,11 @@ class PigLotsViewmodel extends BaseViewmodel {
       setstate(ViewState.loading);
       log(_currentUser.uid!);
       _db.fetchPigLotsStream(_currentUser.uid!).listen((data) {
-        _pigLots = data.docs.map((e) => PigLotsModel.fromMap(e.data())).toList();
+        _pigLots = data.docs.map((e) {
+        final pigLotData = e.data();
+        pigLotData['id'] = e.id; // Agregar el ID del documento a los datos
+        return PigLotsModel.fromMap(pigLotData);
+      }).toList();
         _filteredPigLots = pigLots;
         notifyListeners();
       });

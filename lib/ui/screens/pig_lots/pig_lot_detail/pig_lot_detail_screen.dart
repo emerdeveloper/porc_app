@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
+import 'package:porc_app/core/utils/utilities.dart';
 
 class PigLotDetailScreen extends StatelessWidget {
   const PigLotDetailScreen(
@@ -64,7 +66,7 @@ class PigLotDetailScreen extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                         Text(
-                          "Fecha destete: ${pigLot.weaningDate}",
+                          "Fecha destete: ${Utilities.formatDate(pigLot.weaningDate!)}",
                           style: const TextStyle(fontSize: 16),
                         ),
                         
@@ -101,7 +103,7 @@ class PigLotDetailScreen extends StatelessWidget {
                           children: [
                             Text(
                             "Estado del Pago: ${pigLot.isPaymentDone! ? 
-                            'Hecho el ${pigLot.paymentDate != null ? DateFormat.yMMMd().format(pigLot.paymentDate!) : ''}' :
+                            'Hecho el ${pigLot.paymentDate != null ? Utilities.formatDate(pigLot.paymentDate!) : ''}' :
                             'Pendiente'}",
                             style: const TextStyle(fontSize: 16),
                           ),
@@ -116,6 +118,37 @@ class PigLotDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+              30.verticalSpace,
+//Alimentación
+              Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3), 
+                child: SizedBox(
+                  width: double.infinity, // Expande el Card horizontalmente
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Alimentación ${pigLot.loteName!}",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          "Tiempo de ceba: $months meses y $days días",
+                          style: const TextStyle(fontSize: 16),
+                        )
+                      ]
+                    )
+                  )
+                )
               ),
             ],
           ),

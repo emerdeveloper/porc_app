@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:porc_app/core/services/database_user_service.dart';
 import 'package:porc_app/core/utils/route_utils.dart';
 import 'package:porc_app/firebase_options.dart';
+import 'package:porc_app/ui/screens/home/home_screen.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:porc_app/ui/screens/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         create: (context) => UserProvider(DatabaseUserService()),
         child: const MaterialApp(
           onGenerateRoute: RouteUtils.onGenerateRoute,
-          home: SplashScreen(),
+          home: HomeScreen(),
         ),
       ),
     );

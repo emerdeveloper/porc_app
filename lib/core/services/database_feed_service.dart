@@ -17,28 +17,27 @@ class DatabaseFeedService {
     }
   }
 
-  Future<List<Map<String, dynamic>>?> fetchUsers(String currentUserId) async {
+  Future<List<Map<String, dynamic>>?> fetchFeedHistory(String ownerId, String pigLotId) async {
     try {
       final res = await _fire
           .collection(collection)
-          .where("uid", isNotEqualTo: currentUserId)
+          .where("pigLotId", isEqualTo: pigLotId)
+          .where("ownerId", isEqualTo: ownerId)
           .get();
 
-      return res.docs.map((e) => e.data()).toList();
+      return res.docs.map((e) {
+        final data = e.data();
+        data['id'] = e.id; // Agregar el ID del documento a los datos
+        return data;
+      }).toList();
     } catch (e) {
       rethrow;
     }
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchUserStream(
-          String currentUserId) =>
+  Stream<QuerySnapshot<Map<String, dynamic>>> fetchFeedHistoryStream(String currentUserId) =>
       _fire
           .collection(collection)
-          .where("uid", isNotEqualTo: currentUserId)
-          .snapshots();
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> fetchAllUserStream() =>
-      _fire
-          .collection(collection)
+          .where("pigLotId", isEqualTo: currentUserId)
           .snapshots();
 }

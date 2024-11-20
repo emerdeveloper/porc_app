@@ -14,49 +14,27 @@ class FeedRequestViewmodel extends BaseViewmodel {
 
   FeedRequestViewmodel(this._db);
 
-  String _name = "";
-  String _email = "";
-  String _password = "";
-  String _confirmPassword = "";
+  int _numberPackages = -1;
 
 
-  void setName(String value) {
-    _name = value;
+  void setNumberPackages(String value) {
+    _numberPackages = int.parse(value);
     notifyListeners();
 
-    log("Name: $_name");
+    log("NumberPackages: $_numberPackages");
   }
 
-  void setEmail(String value) {
-    _email = value;
-    notifyListeners();
-
-    log("Email: $_email");
-  }
-
-  setPassword(String value) {
-    _password = value;
-    notifyListeners();
-
-    log("Password: $_password");
-  }
-
-  setConfirmPassword(String value) {
-    _confirmPassword = value;
-    notifyListeners();
-
-    log("Confirm Password: $_confirmPassword");
-  }
 
   save(PigLotsModel pigLot, PigFeedModel feedSelected) async {
     setstate(ViewState.loading);
     try {
         FeedModel feed = FeedModel(
             pigLotId: pigLot.id!, 
+            ownerId: pigLot.ownerId!, 
             pigFeedName: feedSelected.name, 
             pigFeedPrice: feedSelected.price, 
             paymentDate: DateTime.now(), 
-            numberPackages: 20,
+            numberPackages: _numberPackages,
             isPaymentDone: false,
             date: DateTime.now()
             );

@@ -39,7 +39,8 @@ class CustomDropdown extends StatelessWidget {
             ),
             hintText: hintText,
             filled: true,
-            fillColor: isEnable ? Colors.grey.withOpacity(0.1) : Colors.grey.shade300,
+            fillColor: Colors.grey.withOpacity(0.1)
+            //fillColor: isEnable ? Colors.grey.withOpacity(0.1) : Colors.grey.shade300,
           ),
           style: const TextStyle(fontSize: 16, color: Colors.black),
           icon: const Icon(Icons.arrow_drop_down),

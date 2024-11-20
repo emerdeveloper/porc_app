@@ -1,10 +1,15 @@
+import 'package:intl/intl.dart';
 import 'package:porc_app/core/constants/colors.dart';
 import 'package:porc_app/core/constants/string.dart';
 import 'package:porc_app/core/constants/styles.dart';
 import 'package:porc_app/core/enums/enums.dart';
+import 'package:porc_app/core/models/feed_model.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
+import 'package:porc_app/core/services/database_feed_service.dart';
 import 'package:porc_app/core/services/database_pig_lots_services.dart';
+import 'package:porc_app/core/utils/utilities.dart';
+import 'package:porc_app/ui/screens/feed/feed_history/feed_history_viewmodel.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:porc_app/ui/screens/pig_lots/pig_lots_viewmodel.dart';
 import 'package:porc_app/ui/widgets/textfield_widget.dart';
@@ -12,21 +17,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class PigLotsScreen extends StatelessWidget {
-  const PigLotsScreen({super.key});
+class FeedHistoryScreen extends StatelessWidget {
+  const FeedHistoryScreen({super.key, required this.pigLot});
+  final PigLotsModel pigLot;
 
   @override
   Widget build(BuildContext context) {
     final inversorSelected = Provider.of<UserProvider>(context).inversor;
-    final now = DateTime.now();
 
     return ChangeNotifierProvider(
       create: (context) =>
-          PigLotsViewmodel(DatabasePigLotsService(), inversorSelected!),
-      child: Consumer<PigLotsViewmodel>(builder: (context, model, _) {
+          FeedHistoryViewmodel(DatabaseFeedService(), pigLot),
+      child: Consumer<FeedHistoryViewmodel>(builder: (context, model, _) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("Lotes de ${inversorSelected!.name}"),
+            title: Text("Lote de ${inversorSelected!.name}"),
           ),
           body: Padding(
             padding:
@@ -36,36 +41,29 @@ class PigLotsScreen extends StatelessWidget {
                 20.verticalSpace,
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Lotes de ${inversorSelected.name}", style: h)),
+                    child: Text("Alimentación de lote ${pigLot.loteName}", style: h)),
                 20.verticalSpace,
-                CustomTextfield(
-                  isSearch: true,
-                  hintText: "Nombre...",
-                  titleText: "Buscar lote",
-                  onChanged: model.search,
-                ),
-                10.verticalSpace,
                 model.state == ViewState.loading
                     ? const Expanded(
                         child: Center(
                           child: CircularProgressIndicator(),
                         ),
                       )
-                    : model.pigLots.isEmpty
+                    : model.feedHistory.isEmpty
                         ? const Expanded(
                             child: Center(
-                              child: Text("No tiene lotes"),
+                              child: Text("No hay pedidos de alimentos aún"),
                             ),
                           )
                         : Expanded(
                             child: ListView.separated(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
-                              itemCount: model.filteredPigLots.length,
+                              itemCount: model.feedHistory.length,
                               separatorBuilder: (context, index) =>
                                   8.verticalSpace,
                               itemBuilder: (context, index) {
-                                final pigLot = model.filteredPigLots[index];
+                                final pigLot = model.feedHistory[index];
                                 return Card(
                                   elevation: 1,
                                   shape: RoundedRectangleBorder(
@@ -75,7 +73,7 @@ class PigLotsScreen extends StatelessWidget {
                                       horizontal: 8, vertical: 3),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
-                                    child: buildPigLotCard(context, pigLot, inversorSelected, now),
+                                    child: buildPigLotCard(context, pigLot),
                                   ),
                                 );
                               },
@@ -89,10 +87,7 @@ class PigLotsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPigLotCard(BuildContext context, PigLotsModel pigLot, UserModel inversorSelected, DateTime now) {
-    final duration = now.difference(pigLot.weaningDate!);
-    final months = (duration.inDays / 30).floor();
-    final days = duration.inDays % 30;
+  Widget buildPigLotCard(BuildContext context, FeedModel feed) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -102,63 +97,53 @@ class PigLotsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Lote: ${pigLot.loteName ?? 'No Name'}",
+              feed.pigFeedName,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             Text(
-              "Tiempo de ceba: $months meses y $days días",
-              style: const TextStyle(fontSize: 16),
+              "Bultos: ${feed.numberPackages}",
+              style: const TextStyle(fontSize: 13),
             ),
             Text(
-              "Cantidad: ${pigLot.females! + pigLot.males!}",
-              style: const TextStyle(fontSize: 16),
+              "Fecha del pedido: ${Utilities.formatDate(feed.date)}",
+              style: const TextStyle(fontSize: 13),
             ),
+            Text(
+              "Valor: ${feed.pigFeedPrice * feed.numberPackages}",
+              style: const TextStyle(fontSize: 13),
+            ),
+            Row(
+                          children: [
+                            Text(
+                            "Estado del Pago: ${feed.isPaymentDone! ? 
+                            'Hecho el ${feed.paymentDate != null ? DateFormat.yMMMd().format(pigLot.paymentDate!) : ''}' :
+                            'Pendiente'}",
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          SizedBox(width: 10),
+                          Icon(
+                            pigLot.isPaymentDone! ? Icons.check_circle : Icons.error, 
+                          color: pigLot.isPaymentDone! ? Colors.green : Colors.red, 
+                          size: 20)
+                          ]
+                        )
           ],
         ),
         // Íconos de acciones
-        Row(
+        /*Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              icon: const Icon(Icons.info, color: Colors.blue),
-              onPressed: () {
-                // Acción para ver más detalles
-                Navigator.pushNamed(context, 
-                pigLotDetail,
-                    arguments: {
-                  'pigLot': pigLot, // Objeto PigLotsModel
-                  'inversorOwner': inversorSelected, // Objeto UserModel
-                });
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.food_bank, color: Colors.green),
-              onPressed: () {
-                // Acción para ingresar alimento
-                Navigator.pushNamed(context, 
-                feedRequest,
-                    arguments: {
-                  'pigLot': pigLot, // Objeto PigLotsModel
-                });
-              },
-            ),
-            IconButton(
               icon: const Icon(Icons.vaccines, color: Colors.red),
               onPressed: () {
                 // Acción para ingresar vacunas
-                //Navigator.pushNamed(context, 'vaccineEntryScreen',
-                //    arguments: pigLot);
-                // Acción para ingresar alimento
-                Navigator.pushNamed(context, 
-                feedHistory,
-                    arguments: {
-                  'pigLot': pigLot, // Objeto PigLotsModel
-                });
+                Navigator.pushNamed(context, 'vaccineEntryScreen',
+                    arguments: feed);
               },
             ),
           ],
-        )
+        )*/
       ],
     );
   }

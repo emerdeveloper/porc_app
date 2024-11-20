@@ -8,7 +8,6 @@ import 'package:porc_app/core/constants/styles.dart';
 import 'package:porc_app/core/enums/enums.dart';
 import 'package:porc_app/core/extension/widget_extension.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
-import 'package:porc_app/core/models/providers_model.dart';
 import 'package:porc_app/core/services/database_feed_service.dart';
 import 'package:porc_app/core/services/database_providers_service.dart';
 import 'package:porc_app/ui/screens/feed/feed_request_viewmodel.dart';
@@ -68,7 +67,7 @@ class FeedRequestScreen extends StatelessWidget {
                         initialValue: pigLot.loteName,
                         titleText: "Lote",
                         isEnable: false,
-                        onChanged: feedRequestModel.setName,
+                        //onChanged: feedRequestModel.setName,
                       ),
                       15.verticalSpace,
                       CustomDropdown(
@@ -87,7 +86,7 @@ class FeedRequestScreen extends StatelessWidget {
                       CustomDropdown(
                         titleText: "Selecciona el tipo de alimento",
                         items: providersModel.pigFeeds, // Lista de alimentos filtrados
-                        value: providersModel.pigFeeds.isNotEmpty ? providersModel.pigFeeds.first : null, // Valor inicial
+                        //value: providersModel.pigFeeds.isNotEmpty ? providersModel.pigFeeds.first : null, // Valor inicial
                         onChanged: (value) {
                           providersModel.selectPigFeed(value);
                           print("Seleccionaste: $value");
@@ -100,7 +99,7 @@ class FeedRequestScreen extends StatelessWidget {
                         hintText: "Cantidad de bultos",
                         titleText: "Cantidad",
                         keyboardType: TextInputType.number,
-                        //onChanged: feedRequestModel.setQuantity,
+                        onChanged: feedRequestModel.setNumberPackages,
                       ),
                       30.verticalSpace,
                       CustomButton(

@@ -2,7 +2,9 @@
 import 'dart:convert';
 
 class FeedModel {
+  final String? id;
   final String pigLotId;
+  final String ownerId;
   final String pigFeedName;
   final double pigFeedPrice;
   final DateTime paymentDate;
@@ -10,7 +12,9 @@ class FeedModel {
   final bool isPaymentDone;
   final DateTime date;
   FeedModel({
+    this.id,
     required this.pigLotId,
+    required this.ownerId,
     required this.pigFeedName,
     required this.pigFeedPrice,
     required this.paymentDate,
@@ -21,7 +25,9 @@ class FeedModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'pigLotId': pigLotId,
+      'ownerId': ownerId,
       'pigFeedName': pigFeedName,
       'pigFeedPrice': pigFeedPrice,
       'paymentDate': paymentDate.millisecondsSinceEpoch,
@@ -33,7 +39,9 @@ class FeedModel {
 
   factory FeedModel.fromMap(Map<String, dynamic> map) {
     return FeedModel(
+      id: map['id'] as String,
       pigLotId: map['pigLotId'] as String,
+      ownerId: map['ownerId'] as String,
       pigFeedName: map['pigFeedName'] as String,
       pigFeedPrice: map['pigFeedPrice'] as double,
       paymentDate: DateTime.fromMillisecondsSinceEpoch(map['paymentDate'] as int),
@@ -49,6 +57,6 @@ class FeedModel {
 
   @override
   String toString() {
-    return 'FeedModel(pigLotId: $pigLotId, pigFeedName: $pigFeedName, pigFeedPrice: $pigFeedPrice, paymentDate: $paymentDate, numberPackages: $numberPackages, isPaymentDone: $isPaymentDone, date: $date)';
+    return 'FeedModel(id: $id, pigLotId: $pigLotId, ownerId: $ownerId, pigFeedName: $pigFeedName, pigFeedPrice: $pigFeedPrice, paymentDate: $paymentDate, numberPackages: $numberPackages, isPaymentDone: $isPaymentDone, date: $date)';
   }
 }

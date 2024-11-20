@@ -20,3 +20,4 @@ const pigLots = "/pigLots";
 const pigLotDetail = "/pigLotDetail";
 const home = "/home";
 const feedRequest = "/feedRequest";
+const feedHistory = "/feedHistory";

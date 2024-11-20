@@ -37,7 +37,11 @@ class DatabaseUserService {
           .where("uid", isNotEqualTo: currentUserId)
           .get();
 
-      return res.docs.map((e) => e.data()).toList();
+      return res.docs.map((e) {
+        final data = e.data();
+        data['id'] = e.id; // Agregar el ID del documento a los datos
+        return data;
+      }).toList();
     } catch (e) {
       rethrow;
     }

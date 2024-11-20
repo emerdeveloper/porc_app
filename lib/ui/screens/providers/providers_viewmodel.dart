@@ -77,7 +77,7 @@ class ProvidersViewmodel extends BaseViewmodel {
     //_selectedPigFeed = pigFeedName;
     // Buscar el proveedor seleccionado
     _selectedPigFeed = _selectedProvider!.pigFeed.firstWhere(
-      (p) => p.name == pigFeedName,
+      (p) => p.name == pigFeedName!.split(" - ").first,
       orElse: () => PigFeedModel(
       id: '',
       name: 'Desconocido',

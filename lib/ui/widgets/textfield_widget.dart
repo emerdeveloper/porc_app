@@ -13,12 +13,16 @@ class CustomTextfield extends StatelessWidget {
       required this.titleText,
       this.onChanged,
       this.onTap,
+      this.initialValue,
+      this.keyboardType = TextInputType.text,
+      this.isEnable = true,
       this.isPassword = false,
       this.isChatText = false,
       this.isSearch = false});
 
   final void Function(String)? onChanged;
   final String? hintText;
+  final String? initialValue;
   final String titleText;
   final FocusNode? focusNode;
   final bool isSearch;
@@ -26,6 +30,8 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController? controller;
   final void Function()? onTap;
   final bool isPassword;
+  final bool isEnable;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +40,13 @@ class CustomTextfield extends StatelessWidget {
       child: buildTitle(
         title: titleText,
         child: TextFormField(
+          enabled: isEnable,
+          initialValue: initialValue,
           controller: controller,
           onChanged: onChanged,
           focusNode: focusNode,
           obscureText: isPassword,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(isChatText ? 25.r : 10.r)),

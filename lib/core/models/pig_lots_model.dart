@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +6,8 @@ class PigLotsModel {
   final String? id;
   final String? ownerId;
   final double? pigletPrice;
-  final String? paymentStatus;
+  final bool? isPaymentDone;
+  final DateTime? paymentDate;
   final DateTime? weaningDate;
   final String? loteName;
   final int? males;
@@ -17,7 +17,8 @@ class PigLotsModel {
     this.id,
     this.ownerId,
     this.pigletPrice,
-    this.paymentStatus,
+    this.isPaymentDone,
+    this.paymentDate,
     this.weaningDate,
     this.loteName,
     this.males,
@@ -29,7 +30,7 @@ class PigLotsModel {
       'id': id,
       'ownerId': ownerId,
       'pigletPrice': pigletPrice,
-      'paymentStatus': paymentStatus,
+      'isPaymentDone': isPaymentDone,
       'weaningDate': weaningDate?.millisecondsSinceEpoch,
       'loteName': loteName,
       'males': males,
@@ -42,10 +43,8 @@ class PigLotsModel {
       id: map['id'] != null ? map['id'] as String : null,
       ownerId: map['ownerId'] != null ? map['ownerId'] as String : null,
       pigletPrice: map['pigletPrice'] != null ? (map['pigletPrice'] as num).toDouble() : null,
-      paymentStatus: map['paymentStatus'] != null ? map['paymentStatus'] as String : null,
-      weaningDate: map['weaningDate'] != null
-    ? (map['weaningDate'] as Timestamp).toDate()
-    : null,
+      isPaymentDone: map['isPaymentDone'] != null ? map['isPaymentDone'] as bool : null,
+      weaningDate: map['weaningDate'] != null ? (map['weaningDate'] as Timestamp).toDate() : null,
       loteName: map['loteName'] != null ? map['loteName'] as String : null,
       males: map['males'] != null ? map['males'] as int : null,
       females: map['females'] != null ? map['females'] as int : null,
@@ -58,6 +57,6 @@ class PigLotsModel {
 
   @override
   String toString() {
-    return 'PigLotsModel(id: $id, ownerId: $ownerId, pigletPrice: $pigletPrice, paymentStatus: $paymentStatus, weaningDate: $weaningDate, loteName: $loteName, males: $males, females: $females)';
+    return 'PigLotsModel(id: $id, ownerId: $ownerId, pigletPrice: $pigletPrice, isPaymentDone: $isPaymentDone, weaningDate: $weaningDate, loteName: $loteName, males: $males, females: $females)';
   }
 }

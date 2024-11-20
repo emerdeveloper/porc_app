@@ -2,7 +2,7 @@
 <!--Permisos-->
 <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="porc_app"
+        android:label="porcapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -17,4 +17,6 @@ const login = "/login";
 
 const inversors = "/inversors";
 const pigLots = "/pigLots";
+const pigLotDetail = "/pigLotDetail";
 const home = "/home";
+const feedRequest = "/feedRequest";

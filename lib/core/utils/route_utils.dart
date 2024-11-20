@@ -1,7 +1,10 @@
 import 'package:porc_app/core/constants/string.dart';
+import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
 import 'package:porc_app/ui/screens/auth/login/login_screen.dart';
+import 'package:porc_app/ui/screens/feed/feed_request_screen.dart';
 import 'package:porc_app/ui/screens/home/home_screen.dart';
+import 'package:porc_app/ui/screens/pig_lots/pig_lot_detail/pig_lot_detail_screen.dart';
 import 'package:porc_app/ui/screens/pig_lots/pig_lots_screen.dart';
 //import 'package:porc_app/ui/screens/auth/signup/signup_screen.dart';
 //import 'package:porc_app/ui/screens/bottom_navigation/chats_list/chat_room/chat_screen.dart';
@@ -11,7 +14,6 @@ import 'package:flutter/material.dart';
 
 class RouteUtils {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-    final args = settings.arguments;
     switch (settings.name) {
       case splash:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
@@ -23,15 +25,18 @@ class RouteUtils {
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       case pigLots:
         return MaterialPageRoute(builder: (context) => const PigLotsScreen());
-    /*  case signup:
-        return MaterialPageRoute(builder: (context) => const SignupScreen());
-      case wrapper:
-        return MaterialPageRoute(builder: (context) => const Wrapper());
-      case chatRoom:
+      case pigLotDetail:
+        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (context) => ChatScreen(
-                  receiver: args as UserModel,
-                ));*/
+            builder: (context) => PigLotDetailScreen(
+                  pigLot: args['pigLot'] as PigLotsModel,
+                  inversorOwner: args['inversorOwner'] as UserModel,
+                ));
+      case feedRequest:
+      final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(builder: (context) => FeedRequestScreen(
+          pigLot: args['pigLot'] as PigLotsModel
+        ));
 
       default:
         return MaterialPageRoute(

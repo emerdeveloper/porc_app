@@ -3,6 +3,7 @@ import 'package:porc_app/core/constants/string.dart';
 import 'package:porc_app/core/constants/styles.dart';
 import 'package:porc_app/core/enums/enums.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
+import 'package:porc_app/core/models/user_model.dart';
 import 'package:porc_app/core/services/database_pig_lots_services.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:porc_app/ui/screens/pig_lots/pig_lots_viewmodel.dart';
@@ -17,6 +18,8 @@ class PigLotsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inversorSelected = Provider.of<UserProvider>(context).inversor;
+    final now = DateTime.now();
+
     return ChangeNotifierProvider(
       create: (context) =>
           PigLotsViewmodel(DatabasePigLotsService(), inversorSelected!),
@@ -30,7 +33,7 @@ class PigLotsScreen extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: 1.sw * 0.05, vertical: 10.h),
             child: Column(
               children: [
-                30.verticalSpace,
+                20.verticalSpace,
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Lotes de ${inversorSelected.name}", style: h)),
@@ -72,7 +75,7 @@ class PigLotsScreen extends StatelessWidget {
                                       horizontal: 8, vertical: 3),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
-                                    child: buildPigLotCard(context, pigLot),
+                                    child: buildPigLotCard(context, pigLot, inversorSelected, now),
                                   ),
                                 );
                               },
@@ -86,7 +89,10 @@ class PigLotsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPigLotCard(BuildContext context, PigLotsModel pigLot) {
+  Widget buildPigLotCard(BuildContext context, PigLotsModel pigLot, UserModel inversorSelected, DateTime now) {
+    final duration = now.difference(pigLot.weaningDate!);
+    final months = (duration.inDays / 30).floor();
+    final days = duration.inDays % 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +106,7 @@ class PigLotsScreen extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             Text(
-              "Propietario: ....",
+              "Tiempo de ceba: $months meses y $days días",
               style: const TextStyle(fontSize: 16),
             ),
             Text(
@@ -118,16 +124,23 @@ class PigLotsScreen extends StatelessWidget {
               icon: const Icon(Icons.info, color: Colors.blue),
               onPressed: () {
                 // Acción para ver más detalles
-                Navigator.pushNamed(context, 'detailsScreen',
-                    arguments: pigLot);
+                Navigator.pushNamed(context, 
+                pigLotDetail,
+                    arguments: {
+                  'pigLot': pigLot, // Objeto PigLotsModel
+                  'inversorOwner': inversorSelected, // Objeto UserModel
+                });
               },
             ),
             IconButton(
               icon: const Icon(Icons.food_bank, color: Colors.green),
               onPressed: () {
                 // Acción para ingresar alimento
-                Navigator.pushNamed(context, 'foodEntryScreen',
-                    arguments: pigLot);
+                Navigator.pushNamed(context, 
+                feedRequest,
+                    arguments: {
+                  'pigLot': pigLot, // Objeto PigLotsModel
+                });
               },
             ),
             IconButton(

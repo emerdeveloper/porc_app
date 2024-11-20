@@ -4,10 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseUserService {
   final _fire = FirebaseFirestore.instance;
+  final collection = "users";
 
   Future<void> saveUser(Map<String, dynamic> userData) async {
     try {
-      await _fire.collection("users").doc(userData["uid"]).set(userData);
+      await _fire.collection(collection).doc(userData["uid"]).set(userData);
 
       log("User saved successfully");
     } catch (e) {
@@ -17,7 +18,7 @@ class DatabaseUserService {
 
   Future<Map<String, dynamic>?> loadUser(String uid) async {
     try {
-      final res = await _fire.collection("users").doc(uid).get();
+      final res = await _fire.collection(collection).doc(uid).get();
 
       if (res.data() != null) {
         log("User fetched successfully");
@@ -32,7 +33,7 @@ class DatabaseUserService {
   Future<List<Map<String, dynamic>>?> fetchUsers(String currentUserId) async {
     try {
       final res = await _fire
-          .collection("users")
+          .collection(collection)
           .where("uid", isNotEqualTo: currentUserId)
           .get();
 
@@ -45,12 +46,12 @@ class DatabaseUserService {
   Stream<QuerySnapshot<Map<String, dynamic>>> fetchUserStream(
           String currentUserId) =>
       _fire
-          .collection("users")
+          .collection(collection)
           .where("uid", isNotEqualTo: currentUserId)
           .snapshots();
 
   Stream<QuerySnapshot<Map<String, dynamic>>> fetchAllUserStream() =>
       _fire
-          .collection("users")
+          .collection(collection)
           .snapshots();
 }

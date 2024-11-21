@@ -22,8 +22,8 @@ class FeedHistoryViewmodel extends BaseViewmodel {
   fetchFeedHistory(PigLotsModel pigLot) async {
     try {
       setstate(ViewState.loading);
-      log("owner: " +pigLot.ownerId!);
-      log("id lote: "+pigLot.id!);
+      log("owner: ${pigLot.ownerId!}");
+      log("id lote: ${pigLot.id!}");
       final res = await _db.fetchFeedHistory(pigLot.ownerId!, pigLot.id!);
 
       if (res != null && res.length != 0) {

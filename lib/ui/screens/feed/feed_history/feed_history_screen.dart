@@ -129,21 +129,6 @@ class FeedHistoryScreen extends StatelessWidget {
                         )
           ],
         ),
-        // Íconos de acciones
-        /*Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.vaccines, color: Colors.red),
-              onPressed: () {
-                // Acción para ingresar vacunas
-                Navigator.pushNamed(context, 'vaccineEntryScreen',
-                    arguments: feed);
-              },
-            ),
-          ],
-        )*/
       ],
     );
   }

@@ -79,12 +79,18 @@ class InversorsScreen extends StatelessWidget {
   }
 
   Widget buildWidget(context, UserModel user, UserProvider inversorSelected) => ListTile(
-  leading: CircleAvatar(
-    backgroundImage: user.imageUrl != null
-        ? NetworkImage(user.imageUrl!)
-        : Image.asset(profileIcon) as ImageProvider,
-    radius: 25,
+leading: CircleAvatar(
+  backgroundColor: primary,//Colors.blue, // Cambia el color según desees
+  radius: 25,
+  child: Text(
+    user.name!.isNotEmpty ? user.name![0].toUpperCase() : '',
+    style: const TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 20,
+    ),
   ),
+),
   title: Text( "${user.name}",
     style: const TextStyle(fontWeight: FontWeight.bold),
   ),
@@ -109,11 +115,13 @@ class InversorsScreen extends StatelessWidget {
     color: grey,     // Color del icono
   ),
   onTap: () =>  {
-    inversorSelected.inversorSelected(user),
+    //inversorSelected.inversorSelected(user),
     Navigator.pushNamed(
     context,
     pigLots,
-    arguments: user,
+    arguments: {
+                  'inversor': user,
+                },
   )
   },
 );

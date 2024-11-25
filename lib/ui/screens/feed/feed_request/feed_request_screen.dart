@@ -10,7 +10,7 @@ import 'package:porc_app/core/extension/widget_extension.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/services/database_feed_service.dart';
 import 'package:porc_app/core/services/database_providers_service.dart';
-import 'package:porc_app/ui/screens/feed/feed_request_viewmodel.dart';
+import 'package:porc_app/ui/screens/feed/feed_request/feed_request_viewmodel.dart';
 import 'package:porc_app/ui/screens/providers/providers_viewmodel.dart';
 import 'package:porc_app/ui/widgets/button_widget.dart';
 import 'package:porc_app/ui/widgets/dropdown_widget.dart';

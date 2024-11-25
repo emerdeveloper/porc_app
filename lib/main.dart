@@ -55,9 +55,9 @@ class _MyAppState extends State<MyApp> {
         create: (context) => UserProvider(DatabaseUserService()),
         child: MaterialApp(
           onGenerateRoute: RouteUtils.onGenerateRoute,
-          home: _sharedFiles == null || _sharedFiles!.isEmpty
+          home: _sharedFiles == null || _sharedFiles.isEmpty
               ? HomeScreen() // If no shared files, navigate to HomeScreen
-              : ResumeScreen(sharedFiles: _sharedFiles!), // Navigate to PreviewImageScreen if there are shared files
+              : ResumeScreen(sharedFiles: _sharedFiles), // Navigate to PreviewImageScreen if there are shared files
         ),
       ),
     );

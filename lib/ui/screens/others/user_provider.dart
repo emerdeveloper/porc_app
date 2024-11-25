@@ -8,10 +8,8 @@ class UserProvider extends ChangeNotifier {
   UserProvider(this._db);
 
   UserModel? _currentUser;
-  UserModel? _inversorSelected;
 
   UserModel? get user => _currentUser;
-  UserModel? get inversor => _inversorSelected;
 
   loadUser(String uid) async {
     final userData = await _db.loadUser(uid);
@@ -22,10 +20,10 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  inversorSelected(UserModel inversor) async {
+  /*inversorSelected(UserModel inversor) async {
     _inversorSelected = inversor;
     notifyListeners();
-  }
+  }*/
 
   clearUser() {
     _currentUser = null;

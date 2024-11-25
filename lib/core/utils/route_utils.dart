@@ -3,10 +3,10 @@ import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
 import 'package:porc_app/ui/screens/auth/login/login_screen.dart';
 import 'package:porc_app/ui/screens/feed/feed_history/feed_history_screen.dart';
-import 'package:porc_app/ui/screens/feed/feed_request_screen.dart';
+import 'package:porc_app/ui/screens/feed/feed_request/feed_request_screen.dart';
 import 'package:porc_app/ui/screens/home/home_screen.dart';
 import 'package:porc_app/ui/screens/pig_lots/pig_lot_detail/pig_lot_detail_screen.dart';
-import 'package:porc_app/ui/screens/pig_lots/pig_lots_screen.dart';
+import 'package:porc_app/ui/screens/pig_lots/pig_lots_list/pig_lots_screen.dart';
 //import 'package:porc_app/ui/screens/auth/signup/signup_screen.dart';
 //import 'package:porc_app/ui/screens/bottom_navigation/chats_list/chat_room/chat_screen.dart';
 import 'package:porc_app/ui/screens/splash/splash_screen.dart';
@@ -25,7 +25,10 @@ class RouteUtils {
       case home:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       case pigLots:
-        return MaterialPageRoute(builder: (context) => const PigLotsScreen());
+      final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(builder: (context) => PigLotsScreen(
+          inversorSelected: args['inversor'] as UserModel
+        ));
       case pigLotDetail:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
@@ -41,7 +44,8 @@ class RouteUtils {
       case feedHistory:
       final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(builder: (context) => FeedHistoryScreen(
-          pigLot: args['pigLot'] as PigLotsModel
+          pigLot: args['pigLot'] as PigLotsModel,
+          inversor: args['inversor'] as UserModel
         ));
       default:
         return MaterialPageRoute(

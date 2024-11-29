@@ -84,8 +84,8 @@ leading: CircleAvatar(
   radius: 25,
   child: Text(
     user.name!.isNotEmpty ? user.name![0].toUpperCase() : '',
-    style: const TextStyle(
-      color: Colors.white,
+    style: TextStyle(
+      color: Theme.of(context).primaryColor,
       fontWeight: FontWeight.bold,
       fontSize: 20,
     ),

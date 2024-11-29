@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeViewmodel(),
       child: Consumer<HomeViewmodel>(builder: (context, model, _) {
-        return currentUser != null
+        return currentUser == null
             ? const Center(
                 child: CircularProgressIndicator(),
               )
@@ -123,7 +123,7 @@ class BottomNavButton extends StatelessWidget {
         iconPath,
         height: 35,
         width: 35,
-        color: isSelected ? primary : grey, // Resaltar ítem seleccionado
+        color: isSelected ? Theme.of(context).primaryColor : grey, // Resaltar ítem seleccionado
       ),
     );
   }

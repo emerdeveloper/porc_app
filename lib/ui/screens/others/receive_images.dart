@@ -38,6 +38,8 @@ class ReceiveImages {
 
       // Tell the library that we are done processing the intent
       ReceiveSharingIntent.instance.reset();
+    }, onError: (err) {
+      log("getInitialMedia error: $err");
     });
   }
 

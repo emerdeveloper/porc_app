@@ -13,6 +13,7 @@ class FeedHistoryViewmodel extends BaseViewmodel {
     fetchFeedHistory(pigLot);
   }
 
+  int? _selectedIndex;
   List<FeedModel> _feedHistory = [];
   Map<String, List<FeedModel>> _groupedByFeedName = {};
 
@@ -21,6 +22,8 @@ class FeedHistoryViewmodel extends BaseViewmodel {
 
   List<FeedModel> get feedHistory => _feedHistory;
   Map<String, List<FeedModel>> get groupedByFeedName => _groupedByFeedName;
+  // Getter para obtener el índice seleccionado
+  int? get selectedIndex => _selectedIndex;
 
   int get totalPackages =>
       _feedHistory.fold(0, (sum, feed) => sum + feed.numberPackages);
@@ -69,8 +72,17 @@ class FeedHistoryViewmodel extends BaseViewmodel {
     );
   }*/
 
-    void toggleExpanded(int index) {
+  void toggleExpanded(int index) {
     _expanded[index] = !_expanded[index];
     notifyListeners();
+  }
+
+  // Método para seleccionar/deseleccionar un elemento
+  void selectFeed(int index) {
+    if (_feedHistory[index].isPaymentDone == false) {
+      // Alternar la selección del índice
+      _selectedIndex = (_selectedIndex == index) ? null : index;
+      notifyListeners();
+    }
   }
 }

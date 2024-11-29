@@ -10,9 +10,11 @@ class FeedModel {
   final DateTime paymentDate;
   final int numberPackages;
   final bool isPaymentDone;
+  final String? paymentUrl;
   final DateTime date;
   FeedModel({
     this.id,
+    this.paymentUrl,
     required this.pigLotId,
     required this.ownerId,
     required this.pigFeedName,
@@ -26,6 +28,7 @@ class FeedModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'paymentUrl': paymentUrl,
       'pigLotId': pigLotId,
       'ownerId': ownerId,
       'pigFeedName': pigFeedName,
@@ -40,6 +43,7 @@ class FeedModel {
   factory FeedModel.fromMap(Map<String, dynamic> map) {
     return FeedModel(
       id: map['id'] as String,
+      paymentUrl: map['paymentUrl'] != null ? map['paymentUrl'] as String : null,
       pigLotId: map['pigLotId'] as String,
       ownerId: map['ownerId'] as String,
       pigFeedName: map['pigFeedName'] as String,
@@ -57,6 +61,6 @@ class FeedModel {
 
   @override
   String toString() {
-    return 'FeedModel(id: $id, pigLotId: $pigLotId, ownerId: $ownerId, pigFeedName: $pigFeedName, pigFeedPrice: $pigFeedPrice, paymentDate: $paymentDate, numberPackages: $numberPackages, isPaymentDone: $isPaymentDone, date: $date)';
+    return 'FeedModel(id: $id, paymentUrl: $paymentUrl, pigLotId: $pigLotId, ownerId: $ownerId, pigFeedName: $pigFeedName, pigFeedPrice: $pigFeedPrice, paymentDate: $paymentDate, numberPackages: $numberPackages, isPaymentDone: $isPaymentDone, date: $date)';
   }
 }

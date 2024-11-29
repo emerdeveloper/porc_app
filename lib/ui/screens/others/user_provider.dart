@@ -5,11 +5,21 @@ import 'package:flutter/material.dart';
 class UserProvider extends ChangeNotifier {
   final DatabaseUserService _db;
 
-  UserProvider(this._db);
+  UserProvider(this._db){
+    //init();
+    //Eliminar luego
+    // Mover la lógica de `updateSharedFiles` a un post-frame callback
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+        init();});
+  }
 
   UserModel? _currentUser;
 
   UserModel? get user => _currentUser;
+
+  init() async {
+    await loadUser("bIFwIhVopcn0hPsKhANE");
+  }
 
   loadUser(String uid) async {
     final userData = await _db.loadUser(uid);

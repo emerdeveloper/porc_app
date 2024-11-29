@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'package:porc_app/core/services/database_user_service.dart';
 import 'package:porc_app/core/utils/route_utils.dart';
 import 'package:porc_app/firebase_options.dart';
 import 'package:porc_app/ui/screens/home/home_screen.dart';
+import 'package:porc_app/ui/screens/others/preview_payment_provider.dart';
 import 'package:porc_app/ui/screens/others/receive_images.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
+import 'package:porc_app/ui/screens/pig_lots/pig_lots_list/pig_lots_screen.dart';
 import 'package:porc_app/ui/screens/resume/resume_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -42,26 +45,34 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           _sharedFiles.clear();
           _sharedFiles.addAll(files);
-          print(_sharedFiles.map((f) => f.toMap()));
+          log(_sharedFiles.first.path);
         });
       },
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      builder: (context, child) => ChangeNotifierProvider(
-        create: (context) => UserProvider(DatabaseUserService()),
-        child: MaterialApp(
-          onGenerateRoute: RouteUtils.onGenerateRoute,
-          home: _sharedFiles == null || _sharedFiles.isEmpty
-              ? HomeScreen() // If no shared files, navigate to HomeScreen
-              : ResumeScreen(sharedFiles: _sharedFiles), // Navigate to PreviewImageScreen if there are shared files
+@override
+Widget build(BuildContext context) {
+  return ScreenUtilInit(
+    builder: (context, child) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(DatabaseUserService()),
         ),
+        ChangeNotifierProvider(
+          create: (context) => PreviewPaymentProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        onGenerateRoute: RouteUtils.onGenerateRoute,
+        home: _sharedFiles == null || _sharedFiles.isEmpty
+            ? HomeScreen() // If no shared files, navigate to HomeScreen
+            : PigLotsScreen(sharedFiles: _sharedFiles), // Navigate to PigLotsScreen if there are shared files
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
 
 class MyHttpOverrides extends HttpOverrides {

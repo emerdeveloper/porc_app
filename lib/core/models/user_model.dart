@@ -5,20 +5,20 @@ class UserModel {
   final String? uid;
   final String? name;
   final String? email;
-  final String? imageUrl;
+  final String? role;
 
   UserModel(
       {this.uid,
       this.name,
       this.email,
-      this.imageUrl});
+      this.role});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uid': uid,
       'name': name,
       'email': email,
-      'imageUrl': imageUrl
+      'role': role
     };
   }
 
@@ -28,7 +28,7 @@ class UserModel {
       uid: map['uid'] != null ? map['uid'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
-      imageUrl: map['imageUrl'] != null ? map['imageUrl'] as String : null,
+      role: map['role'] != null ? map['role'] as String : null,
     );
   }
 
@@ -39,6 +39,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, imageUrl: $imageUrl)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, role: $role)';
   }
 }

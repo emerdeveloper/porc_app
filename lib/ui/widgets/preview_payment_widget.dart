@@ -12,11 +12,13 @@ class PreviewPayment extends StatelessWidget {
       {super.key,
       required this.sharedFiles,
       required this.isSelected,
-      this.onPressed});
+      this.onPressed,
+      this.loading = false});
 
   final List<SharedMediaFile> sharedFiles;
   final bool isSelected;
   final void Function()? onPressed;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,7 @@ class PreviewPayment extends StatelessWidget {
               ),
               if (isSelected)
                 CustomButton(
+                  loading: loading,
                   onPressed: onPressed,
                   height: 35,
                   width: 90, 

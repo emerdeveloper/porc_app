@@ -5,6 +5,7 @@ import 'package:porc_app/ui/screens/inversors/inversors_screen.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:porc_app/ui/screens/pig_lots/pig_lots_list/pig_lots_screen.dart';
 import 'package:porc_app/ui/screens/providers/providers_screen.dart';
 import 'package:porc_app/ui/screens/resume/resume_screen.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +13,25 @@ import 'package:provider/provider.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  static final List<Widget> _screens = [
-    const InversorsScreen(),
-    const ResumeScreen(),
-    const ProvidersScreen()
-  ];
+  List<Widget> getScreens(String role) {
+    if (role == "producer") {
+      return [
+        const InversorsScreen(),
+        const ProvidersScreen(),
+        const ResumeScreen(),
+      ];
+    } else if (role == "inversor") {
+      return [
+        const PigLotsScreen(),
+        const ProvidersScreen(),
+        const ResumeScreen(),
+      ];
+    } else {
+      return [
+        const Center(child: Text("No screens available")),
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +40,26 @@ class HomeScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeViewmodel(),
       child: Consumer<HomeViewmodel>(builder: (context, model, _) {
-        return currentUser == null
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Scaffold(
-                body: HomeScreen._screens[model.currentIndex],
-                bottomNavigationBar: CustomNavBar(
-                  currentIndex: model.currentIndex,
-                  onTap: model.setIndex,
-                ),
-              );
+        if (currentUser == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        final screens = getScreens(currentUser.role ?? "");
+
+        return Scaffold(
+          body: screens[model.currentIndex],
+          bottomNavigationBar: CustomNavBar(
+            currentIndex: model.currentIndex,
+            onTap: model.setIndex,
+          ),
+        );
       }),
     );
   }
 }
+
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({

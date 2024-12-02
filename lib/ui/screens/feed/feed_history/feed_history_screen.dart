@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 import 'package:porc_app/core/constants/colors.dart';
 import 'package:porc_app/core/constants/string.dart';
@@ -7,6 +9,7 @@ import 'package:porc_app/core/models/feed_model.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/models/user_model.dart';
 import 'package:porc_app/core/services/database_feed_service.dart';
+import 'package:porc_app/core/services/storage_service.dart';
 import 'package:porc_app/core/utils/utilities.dart';
 import 'package:porc_app/ui/screens/feed/feed_history/feed_history_viewmodel.dart';
 import 'package:porc_app/ui/screens/others/preview_payment_provider.dart';
@@ -27,7 +30,7 @@ class FeedHistoryScreen extends StatelessWidget {
         inversor ?? Provider.of<UserProvider>(context).user;
 
     return ChangeNotifierProvider(
-      create: (context) => FeedHistoryViewmodel(DatabaseFeedService(), pigLot),
+      create: (context) => FeedHistoryViewmodel(DatabaseFeedService(), pigLot, StorageService()),
       child: Consumer<FeedHistoryViewmodel>(
         builder: (context, model, _) {
           return Scaffold(
@@ -74,9 +77,12 @@ class FeedHistoryScreen extends StatelessWidget {
                             final pigLot = model.feedHistory[index];
                             final isSelected = model.selectedIndex == index;
                             return GestureDetector(
-                              onTap: (context.read<PreviewPaymentProvider>().sharedFiles == null) ? 
-                              () {} : 
-                              () => model.selectFeed(index),
+                              onTap: (context
+                                          .read<PreviewPaymentProvider>()
+                                          .sharedFiles ==
+                                      null)
+                                  ? () {}
+                                  : () => model.selectFeed(index),
                               child: Card(
                                 elevation: 1,
                                 shape: RoundedRectangleBorder(
@@ -117,13 +123,26 @@ class FeedHistoryScreen extends StatelessWidget {
                   builder: (context, previewProvider, _) {
                     if (previewProvider.sharedFiles == null) return SizedBox();
 
-                    final isSelected = context.read<FeedHistoryViewmodel>().selectedIndex != null;
+                    final isSelected = model.selectedIndex != null;
                     return Align(
                       alignment: Alignment.bottomCenter,
                       child: PreviewPayment(
                         sharedFiles: previewProvider.sharedFiles!,
                         isSelected: isSelected,
-                        onPressed: () => {},
+                        loading: model.state == ViewState.loading,
+                        onPressed: () async {
+                          try {
+                            await model.savePaymentFeed(File(previewProvider.sharedFiles!.first.path));
+                            ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Solicitud guardada con éxito")),
+    );
+                            Navigator.pop(context);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(e.toString())),
+    );
+                          }
+                      }
                       ),
                     );
                   },
@@ -186,7 +205,7 @@ class FeedHistoryScreen extends StatelessWidget {
             ),
             Row(children: [
               Text(
-                "Estado del Pago: ${feed.isPaymentDone! ? 'Hecho el ${feed.paymentDate != null ? DateFormat.yMMMd().format(pigLot.paymentDate!) : ''}' : 'Pendiente'}",
+                "Estado del Pago: ${feed.isPaymentDone ? 'Hecho el ${feed.paymentDate != null ? DateFormat.yMMMd().format(pigLot.paymentDate!) : ''}' : 'Pendiente'}",
                 style: const TextStyle(fontSize: 13),
               ),
               const SizedBox(width: 10),

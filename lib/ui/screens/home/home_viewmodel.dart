@@ -1,7 +1,7 @@
 import 'package:porc_app/core/other/base_viewmodel.dart';
 
 class HomeViewmodel extends BaseViewmodel {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;
 

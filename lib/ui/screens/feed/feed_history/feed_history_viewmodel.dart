@@ -1,15 +1,18 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:porc_app/core/enums/enums.dart';
 import 'package:porc_app/core/models/feed_model.dart';
 import 'package:porc_app/core/models/pig_lots_model.dart';
 import 'package:porc_app/core/other/base_viewmodel.dart';
 import 'package:porc_app/core/services/database_feed_service.dart';
+import 'package:porc_app/core/services/storage_service.dart';
 
 class FeedHistoryViewmodel extends BaseViewmodel {
   final DatabaseFeedService _db;
+  final StorageService _storage;
 
-  FeedHistoryViewmodel(this._db, PigLotsModel pigLot) {
+  FeedHistoryViewmodel(this._db, PigLotsModel pigLot, this._storage) {
     fetchFeedHistory(pigLot);
   }
 
@@ -62,15 +65,35 @@ class FeedHistoryViewmodel extends BaseViewmodel {
     }
   }
 
-/*  Map<String, List<FeedModel>> _groupFeedsByName(List<FeedModel> feeds) {
-    return feeds.fold<Map<String, List<FeedModel>>>(
-      {},
-      (map, feed) {
-        map.putIfAbsent(feed.pigFeedName, () => []).add(feed);
-        return map;
-      },
-    );
-  }*/
+  savePaymentFeed(File image ) async {
+    setstate(ViewState.loading);
+    try {
+      String? downloadUrl;
+      FeedModel feedSelected = _feedHistory[_selectedIndex!];
+
+      downloadUrl = await _storage.uploadPaymentImage(image, feedSelected.ownerId, feedSelected.pigLotId);
+
+      FeedModel feed = FeedModel(
+        paymentUrl: downloadUrl,
+        pigLotId: feedSelected.pigLotId,
+        ownerId: feedSelected.ownerId,
+        pigFeedName: feedSelected.pigFeedName,
+        pigFeedPrice: feedSelected.pigFeedPrice,
+        paymentDate: DateTime.now(),
+        numberPackages: feedSelected.numberPackages,
+        isPaymentDone: true,
+        date: feedSelected.date);
+
+
+        await _db.saveFeed(feed.toMap());
+
+      setstate(ViewState.idle);
+    } catch (e) {
+      setstate(ViewState.idle);
+      log(e.toString());
+      rethrow;
+    }
+  }
 
   void toggleExpanded(int index) {
     _expanded[index] = !_expanded[index];

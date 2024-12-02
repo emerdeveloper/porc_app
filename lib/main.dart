@@ -13,7 +13,6 @@ import 'package:porc_app/ui/screens/others/preview_payment_provider.dart';
 import 'package:porc_app/ui/screens/others/receive_images.dart';
 import 'package:porc_app/ui/screens/others/user_provider.dart';
 import 'package:porc_app/ui/screens/pig_lots/pig_lots_list/pig_lots_screen.dart';
-import 'package:porc_app/ui/screens/resume/resume_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 

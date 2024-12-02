@@ -26,7 +26,7 @@ class ResumeScreen extends StatelessWidget {
           children: [
             50.verticalSpace,
             CustomButton(
-              text: "Logout",
+              text: "Cerrar sesión",
               onPressed: () {
                 Provider.of<UserProvider>(context, listen: false).clearUser();
                 AuthService().logout();
